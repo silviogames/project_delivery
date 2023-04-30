@@ -65,6 +65,9 @@ public class Config
    public enum CONF
    {
       WALK_SPEED,
+      GRAVITY,
+      MAX_FALLING_SPEED,
+      COYOTE_TIME_MS,
       ;
 
       // IF THE FILE DOES NOT SET THE VALUE A DEFAULT OF 10 MAY BE WEIRD FOR SOME OF THE CONFIGS

@@ -52,6 +52,11 @@ public class Util
       return ((float) value_in) / 1000f;
    }
 
+   public static float round_to_digit(float val, int digits){
+      float div = (float) Math.pow(10, digits);
+      return MathUtils.round(val * div) / div;
+   }
+
    public static int wrapped_increment(int value, int change, int min, int max)
    {
       // max is included!

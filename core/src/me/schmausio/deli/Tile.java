@@ -5,16 +5,18 @@ import com.badlogic.gdx.utils.IntIntMap;
 
 public enum Tile
 {
-   AIR(Color.CLEAR),
-   BASIC_BLOCK(Color.BLACK),
+   AIR(Color.CLEAR, false),
+   BASIC_BLOCK(Color.BLACK, true),
 
    ;
 
    public Color tex_color;
+   public final boolean collision;
 
-   Tile(Color c)
+   Tile(Color c, boolean collision)
    {
       this.tex_color = c;
+      this.collision = collision;
    }
 
    public static void init_colors()

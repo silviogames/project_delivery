@@ -34,6 +34,8 @@ public class Main extends ApplicationAdapter
       Text.init();
       Tile.init_colors();
 
+      Config.load_config(false);
+
       World.init_status(World.WorldStatus.LOAD_CHUNKS);
    }
 

@@ -4,23 +4,24 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IntArray;
+import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.IntSet;
 
 public class World
 {
    public static Array<Chunk> list_chunks = new Array<>();
 
-   // indices of chunks ist list_chunks that should be rendered right now
-   static IntArray visible_chunks = new IntArray();
+   // combinded cx,cy map to index of chunks in list_chunk
+   public static IntIntMap chunk_map = new IntIntMap();
+
    static IntSet visible_chunks_set = new IntSet();
    // index that increments every frame and checks all chunks for visibility
    static int chunk_check_index = 0;
 
    public static float global_offset_x, global_offset_y;
+   public static float camera_offset_x, camera_offset_y;
 
    public static WorldStatus status;
 
@@ -33,6 +34,7 @@ public class World
    static Array<FileHandle> list_chunk_files = new Array<>();
 
    static boolean debug_render = true;
+   static boolean debug_slow_motion = false;
 
    static
    {
@@ -54,6 +56,50 @@ public class World
       status = new_status;
    }
 
+   public static boolean collision(float entity_x, float entity_y)
+   {
+      return get_tile(entity_x, entity_y).collision;
+   }
+
+   public static Tile get_tile(float entity_x, float entity_y)
+   {
+      int tx = (int) (entity_x / Chunk.TILE_SIZE);
+      int ty = (int) (entity_y / Chunk.TILE_SIZE);
+      tx = tx % Chunk.CHUNK_SIZE;
+      ty = ty % Chunk.CHUNK_SIZE;
+      Chunk c = get_chunk(entity_x, entity_y);
+      if (c == null)
+      {
+         return Tile.AIR;
+      } else
+      {
+         return Tile.safe_ord(c.content.get(tx, ty));
+      }
+   }
+
+   public static int entity_pos_to_chunk_x(float entity_x)
+   {
+      return (int) (entity_x / (Chunk.TILE_SIZE * Chunk.CHUNK_SIZE));
+   }
+
+   public static int entity_pos_to_chunk_y(float entity_y)
+   {
+      return (int) (entity_y / (Chunk.TILE_SIZE * Chunk.CHUNK_SIZE));
+   }
+
+   public static Chunk get_chunk(float entity_x, float entity_y)
+   {
+      return get_chunk(entity_pos_to_chunk_x(entity_x), entity_pos_to_chunk_y(entity_y));
+   }
+
+   public static Chunk get_chunk(int cx, int cy)
+   {
+      int combinedValue = (cx << 16) | cy;
+      int chunk_index = chunk_map.get(combinedValue, -1);
+      if (chunk_index == -1) return null;
+      return list_chunks.get(chunk_index);
+   }
+
    public static void update(float delta)
    {
       switch (status)
@@ -72,7 +118,13 @@ public class World
                   Chunk loaded_chunk = Chunk.load_from_png(chunk_file);
                   if (loaded_chunk != null)
                   {
+                     // Combine the two values into a single int
+                     int combinedValue = (loaded_chunk.cx << 16) | loaded_chunk.cy;
+                     chunk_map.put(combinedValue, list_chunks.size);
                      list_chunks.add(loaded_chunk);
+
+                     //int cx = combinedValue >> 16;
+                     //int cy = combinedValue & 0xFFFF;
                   }
                }
             }
@@ -80,6 +132,7 @@ public class World
          break;
          case PLAY:
          {
+            if (debug_slow_motion) delta /= 10f;
             for (int i = 0; i < list_entities.size; i++)
             {
                Entity ent = list_entities.get(i);
@@ -99,6 +152,28 @@ public class World
             if (chunk_check_index >= list_chunks.size) chunk_check_index = 0;
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) debug_render = !debug_render;
+
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            {
+               camera_offset_x += delta * 500;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            {
+               camera_offset_x -= delta * 500;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.UP))
+            {
+               camera_offset_y -= delta * 500;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+            {
+               camera_offset_y += delta * 500;
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.F10))
+            {
+               camera_offset_x = 0;
+               camera_offset_y = 0;
+            }
          }
          break;
       }
@@ -106,32 +181,47 @@ public class World
 
    public static void render()
    {
-      if (debug_render)
+      switch (status)
       {
-         int run_y = Main.SCREEN_HEIGHT;
-         int off_y = 8;
-         Text.draw("go " + MathUtils.round(global_offset_x) + "|" + MathUtils.round(global_offset_y), 2, run_y -= off_y);
-         Text.draw("vis chunks " + visible_chunks_set.size, 2, run_y-=off_y);
-      }
+         case PLAY:
+         {
+            if (debug_render)
+            {
+               int run_y = Main.SCREEN_HEIGHT;
+               int off_y = 8;
+               Text.draw("go " + MathUtils.round(global_offset_x) + "|" + MathUtils.round(global_offset_y), 2, run_y -= off_y);
+               Text.draw("vis chunks " + visible_chunks_set.size, 2, run_y -= off_y);
+               Text.draw("current chunk [" + entity_pos_to_chunk_x(player.posx) + "|" + entity_pos_to_chunk_y(player.posy) + "]", 2, run_y -= off_y);
+               Tile test_tile = get_tile(player.posx, player.posy);
+               Text.draw("test_tile "+ test_tile.toString(), 2, run_y-=off_y);
+               Text.draw("player v "+ player.vx + " "+player.vy , 2, run_y-=off_y);
+            }
 
-      global_offset_x = -player.posx + Main.SCREEN_WIDTH / 2f;
-      global_offset_y = -player.posy + Main.SCREEN_HEIGHT / 2f;
+            global_offset_x = -player.posx + Main.SCREEN_WIDTH / 2f + camera_offset_x;
+            global_offset_y = -player.posy + Main.SCREEN_HEIGHT / 2f + camera_offset_y;
 
-      IntSet.IntSetIterator iterator = visible_chunks_set.iterator();
-      while (iterator.hasNext)
-      {
-         int value = iterator.next();
-         Chunk c = list_chunks.get(value);
-         c.render();
-      }
+            IntSet.IntSetIterator iterator = visible_chunks_set.iterator();
+            while (iterator.hasNext)
+            {
+               int value = iterator.next();
+               Chunk c = list_chunks.get(value);
+               c.render();
+            }
 
-      for (int i = 0; i < list_entities.size; i++)
-      {
-         Entity ent = list_entities.get(i);
-         ent.render();
+            for (int i = 0; i < list_entities.size; i++)
+            {
+               Entity ent = list_entities.get(i);
+               ent.render();
+            }
+         }
+         break;
+         case LOAD_CHUNKS:
+         {
+            Text.cdraw("loading chunks " + list_chunk_files.size, Main.SCREEN_WIDTH / 2, Main.SCREEN_HEIGHT / 2, Color.WHITE, 2f);
+         }
+         break;
       }
    }
-
 
    public enum WorldStatus
    {
