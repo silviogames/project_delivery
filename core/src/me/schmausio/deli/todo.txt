@@ -1,0 +1,16 @@
+- load chunks
+- render chunk based on loaded image
+- grid based world 2D world
+- implement simple box point-collisions
+
+- load on startup and hot reload the config file
+
+- auto export all tiles to a helper sprite
+
+- doors/portals with fade transition
+
+- create chunks in asesprite with layers:
+    - one layer for the blocks
+    - one layer for background decoration
+    - one layer for special stuff like portals, enemies, items
+

@@ -1,0 +1,20 @@
+
+delivery.png
+size: 256, 128
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+5x6font
+  rotate: false
+  xy: 2, 26
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+error_frame
+  rotate: false
+  xy: 2, 2
+  size: 16, 22
+  orig: 16, 22
+  offset: 0, 0
+  index: -1
