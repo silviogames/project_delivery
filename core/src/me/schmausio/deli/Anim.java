@@ -5,6 +5,9 @@ public enum Anim
    // SIMPLE ANIMATION SYSTEM
 
    DUMMY(2, 1f, -1, false, 0, 1),
+   PIG_IDLE(2, 0.1f, -1, true, 0,1),
+   PIG_IDLE_PACK(2, 0.1f, -1, true, 0,1),
+   PIG_RUN(2, 0.1f, -1, true, 0,1),
 
    ;
    public static float[] returner = new float[3];

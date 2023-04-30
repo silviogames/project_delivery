@@ -23,6 +23,11 @@ public class Entity
    static BooleanArray collisions = new BooleanArray();
    static FloatArray collision_ypos = new FloatArray();
 
+   Anim anim;
+   float anim_time = 0f;
+
+   boolean flip = false;
+
    public Entity(float posx, float posy, EntityType type)
    {
       this.posx = posx;
@@ -40,6 +45,8 @@ public class Entity
             this.posy = spawn_chunk_y * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE + tiley_offset * Chunk.TILE_SIZE;
             break;
       }
+
+      anim = type.anim_idle();
    }
 
    public void update(float delta)
@@ -52,10 +59,12 @@ public class Entity
             if (Gdx.input.isKeyPressed(Input.Keys.A))
             {
                vx = -1;
+               flip = true;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.D))
             {
                vx = 1;
+               flip = false;
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !falling)
             {
@@ -78,6 +87,12 @@ public class Entity
                      coyote = false;
                   }
                }
+            }
+            if (vx != 0)
+            {
+               anim = type.anim_run();
+            }else{
+               anim = type.anim_idle();
             }
          }
          break;
@@ -139,7 +154,6 @@ public class Entity
          }
       }
 
-
       if (collision_hori)
       {
          vx = 0;
@@ -147,6 +161,9 @@ public class Entity
       {
          posx = nx;
       }
+
+      float[] ret = anim.update(anim_time, delta);
+      anim_time = ret[0];
    }
 
    public void render()
@@ -155,7 +172,11 @@ public class Entity
       float py = World.global_offset_y + posy;
 
       // TODO: 29.04.23 placeholder texture for now
-      RenderUtil.render_box(px - 5, py, 10, 20, Color.NAVY);
+      switch (type){
+         case PLAYER:
+            Main.batch.draw(Res.get_frame(anim_time, anim, flip), px,py);
+            break;
+      }
    }
 
    public enum EntityType
@@ -163,5 +184,29 @@ public class Entity
       PLAYER,
       FOO,
       ;
+
+      public Anim anim_idle()
+      {
+         Anim ret = Anim.PIG_IDLE;
+         switch (this)
+         {
+            case PLAYER:
+               ret = Anim.PIG_IDLE;
+               break;
+         }
+         return ret;
+      }
+
+      public Anim anim_run()
+      {
+         Anim ret = Anim.PIG_IDLE;
+         switch (this)
+         {
+            case PLAYER:
+               ret = Anim.PIG_RUN;
+               break;
+         }
+         return ret;
+      }
    }
 }

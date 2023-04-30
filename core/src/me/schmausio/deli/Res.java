@@ -15,7 +15,10 @@ public enum Res
    ERROR_FRAME(),
    PIXEL(),
    BOX(),
-   BLOCK1(Tile.values().length, 16, 16);
+   BLOCK1(Tile.values().length, 16, 16),
+   PIG(6, 30, 22),
+
+   ;
 
    static final Array<Anim> load_queue = new Array<Anim>();
    public static Array<TextureRegion> animation_frames = new Array<TextureRegion>(); // contains all frames of all animations
@@ -72,6 +75,11 @@ public enum Res
       load_queue.clear();
        */
 
+      load_queue.add(Anim.PIG_IDLE);
+      load_queue.add(Anim.PIG_IDLE_PACK);
+      load_queue.add(Anim.PIG_RUN);
+      load_anims(PIG.region, 30, 22, 0);
+      load_queue.clear();
    }
 
    private static void fixBleeding(TextureRegion... array)
