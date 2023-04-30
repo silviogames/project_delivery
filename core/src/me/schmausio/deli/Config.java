@@ -66,6 +66,7 @@ public class Config
    {
       WALK_SPEED,
       GRAVITY,
+      JUMP_STRENGTH,
       MAX_FALLING_SPEED,
       COYOTE_TIME_MS,
       ;

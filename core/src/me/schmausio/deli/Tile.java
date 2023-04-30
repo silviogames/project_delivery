@@ -6,7 +6,11 @@ import com.badlogic.gdx.utils.IntIntMap;
 public enum Tile
 {
    AIR(Color.CLEAR, false),
-   BASIC_BLOCK(Color.BLACK, true),
+   DIRT(RenderUtil.TILE_COLOR_DIRT, true),
+   DIRT_WITH_GRAS(RenderUtil.TILE_COLOR_DIRT_WITH_GRASS, true),
+   GRASS_FLOWER(RenderUtil.TILE_COLOR_FLOWERS, false),
+   GRASS(RenderUtil.TILE_COLOR_GRASS_ONLY, false),
+   GRASS_FLOWER_TWO(RenderUtil.TILE_COLOR_GRASS_FLOWERS, false),
 
    ;
 

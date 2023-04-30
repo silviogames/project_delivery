@@ -139,19 +139,27 @@ public class World
                ent.update(delta);
             }
 
-            // rendering the chunk ins visible list
-            Chunk check_chunk = list_chunks.get(chunk_check_index);
-            if (check_chunk.should_be_rendered(player.posx, player.posy))
+            if(list_chunks.size > 0)
             {
-               visible_chunks_set.add(chunk_check_index);
-            } else
-            {
-               visible_chunks_set.remove(chunk_check_index);
+               // rendering the chunk ins visible list
+               Chunk check_chunk = list_chunks.get(chunk_check_index);
+               if (check_chunk.should_be_rendered(player.posx, player.posy))
+               {
+                  visible_chunks_set.add(chunk_check_index);
+               } else
+               {
+                  visible_chunks_set.remove(chunk_check_index);
+               }
+               chunk_check_index++;
+               if (chunk_check_index >= list_chunks.size) chunk_check_index = 0;
             }
-            chunk_check_index++;
-            if (chunk_check_index >= list_chunks.size) chunk_check_index = 0;
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) debug_render = !debug_render;
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.F4))
+            {
+               Config.load_config(true);
+            }
 
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
             {
@@ -193,8 +201,8 @@ public class World
                Text.draw("vis chunks " + visible_chunks_set.size, 2, run_y -= off_y);
                Text.draw("current chunk [" + entity_pos_to_chunk_x(player.posx) + "|" + entity_pos_to_chunk_y(player.posy) + "]", 2, run_y -= off_y);
                Tile test_tile = get_tile(player.posx, player.posy);
-               Text.draw("test_tile "+ test_tile.toString(), 2, run_y-=off_y);
-               Text.draw("player v "+ player.vx + " "+player.vy , 2, run_y-=off_y);
+               Text.draw("test_tile " + test_tile.toString(), 2, run_y -= off_y);
+               Text.draw("player v " + player.vx + " " + player.vy, 2, run_y -= off_y);
             }
 
             global_offset_x = -player.posx + Main.SCREEN_WIDTH / 2f + camera_offset_x;

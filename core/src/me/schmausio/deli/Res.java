@@ -14,7 +14,8 @@ public enum Res
 
    ERROR_FRAME(),
    PIXEL(),
-   ;
+   BOX(),
+   BLOCK1(Tile.values().length, 16, 16);
 
    static final Array<Anim> load_queue = new Array<Anim>();
    public static Array<TextureRegion> animation_frames = new Array<TextureRegion>(); // contains all frames of all animations
