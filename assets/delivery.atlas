@@ -6,9 +6,23 @@ filter: Nearest, Nearest
 repeat: none
 5x6font
   rotate: false
-  xy: 2, 26
+  xy: 2, 44
   size: 128, 64
   orig: 128, 64
+  offset: 0, 0
+  index: -1
+block1
+  rotate: false
+  xy: 2, 26
+  size: 101, 16
+  orig: 101, 16
+  offset: 0, 0
+  index: -1
+box
+  rotate: false
+  xy: 132, 88
+  size: 20, 20
+  orig: 20, 20
   offset: 0, 0
   index: -1
 error_frame

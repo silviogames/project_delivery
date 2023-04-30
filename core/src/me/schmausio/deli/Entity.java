@@ -32,8 +32,12 @@ public class Entity
       switch (type)
       {
          case PLAYER:
-            this.posx = 10 * 16;
-            this.posy = 30 * 16;
+            int spawn_chunk_x = 0;
+            int spawn_chunk_y = 5;
+            int tilex_offset = 5;
+            int tiley_offset = 14;
+            this.posx = spawn_chunk_x * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE + tilex_offset * Chunk.TILE_SIZE;
+            this.posy = spawn_chunk_y * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE + tiley_offset * Chunk.TILE_SIZE;
             break;
       }
    }
@@ -55,7 +59,7 @@ public class Entity
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !falling)
             {
-               vy = 3;
+               vy = Config.CONF.JUMP_STRENGTH.value;
                falling = true;
             }
             if (!falling)

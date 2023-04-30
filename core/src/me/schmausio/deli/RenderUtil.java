@@ -14,8 +14,11 @@ public class RenderUtil
 
    public final static Color[] miner_colors_trans = new Color[4];
 
-   public final static Color ICE_COLOR;
-   public final static Color IMPACT_WARNING_COLOR;
+   public final static Color TILE_COLOR_DIRT = color(160, 130, 100);
+   public final static Color TILE_COLOR_DIRT_WITH_GRASS = color(100, 140, 100);
+   public final static Color TILE_COLOR_FLOWERS = color(100, 100, 100);
+   public final static Color TILE_COLOR_GRASS_ONLY = color(150, 150, 150);
+   public final static Color TILE_COLOR_GRASS_FLOWERS = color(200, 200, 200);
 
    static
    {
@@ -34,12 +37,11 @@ public class RenderUtil
       miner_colors_trans[2].a = 0.5f;
       miner_colors_trans[3] = Color.GOLD.cpy();
       miner_colors_trans[3].a = 0.5f;
+   }
 
-      ICE_COLOR = Color.SKY.cpy();
-      ICE_COLOR.a = 0.7f;
-
-      IMPACT_WARNING_COLOR = Color.SCARLET.cpy();
-      IMPACT_WARNING_COLOR.a = 0.25f;
+   public static Color color(int R, int G, int B)
+   {
+      return new Color(R / 255f, G / 255f, B / 255f, 1f);
    }
 
    public static void render_box(int posx, int posy, int width, int height)
