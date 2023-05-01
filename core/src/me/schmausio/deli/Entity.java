@@ -53,6 +53,9 @@ public class Entity
    // postbox
    boolean postbox_active = false;
 
+   static String message = "";
+   static float time_message = 0f;
+
    static
    {
       int spawn_chunk_x = 0;

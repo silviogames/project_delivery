@@ -14,8 +14,8 @@ repeat: none
 block1
   rotate: false
   xy: 465, 1342
-  size: 118, 16
-  orig: 118, 16
+  size: 135, 16
+  orig: 135, 16
   offset: 0, 0
   index: -1
 box
