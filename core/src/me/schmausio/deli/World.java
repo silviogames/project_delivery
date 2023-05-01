@@ -38,15 +38,35 @@ public class World
 
    static Array<FileHandle> list_chunk_files = new Array<>();
 
-   static boolean debug_render = true;
+   static boolean debug_render = false;
    static boolean debug_slow_motion = false;
 
    static Osc osc_box_hover = new Osc(3, 5, 2);
 
+   static int total_collect_box = 0;
+
+
+   static int[] tips_posx = new int[3];
+   static int[] tips_posy = new int[3];
+   static String[] tips = new String[3];
+
    static
    {
       list_entities.add(player);
+      tips_posx[0] = 400;
+      tips_posy[0] = 5344;
+      tips[0] = "[space] to jump";
+
+      tips_posx[1] = 837;
+      tips_posy[1] = 5344;
+      tips[1] = "[E] to throw box";
+
+      tips_posx[2] = 1030;
+      tips_posy[2] = 5344;
+      tips[2] = "deliver the box!";
    }
+
+   static final int end_x = 2630, end_y = 4880;
 
    public static void init_status(WorldStatus new_status)
    {
@@ -256,9 +276,9 @@ public class World
 
             if (Entity.num_collected_box > 0)
             {
-               RenderUtil.render_box(Main.SCREEN_WIDTH - 55, Main.SCREEN_HEIGHT - 30, 50, 26, RenderUtil.collect_box_shadow);
-               Main.batch.draw(Res.BOX.region, Main.SCREEN_WIDTH - 50, Main.SCREEN_HEIGHT - 28);
-               Text.cdraw("" + Entity.num_collected_box, Main.SCREEN_WIDTH - 17, Main.SCREEN_HEIGHT - 24, Color.GOLD, 2f);
+               RenderUtil.render_box(Main.SCREEN_WIDTH - 75, Main.SCREEN_HEIGHT - 30, 70, 26, RenderUtil.collect_box_shadow);
+               Main.batch.draw(Res.BOX.region, Main.SCREEN_WIDTH - 70, Main.SCREEN_HEIGHT - 28);
+               Text.cdraw("" + Entity.num_collected_box + "/" + World.total_collect_box, Main.SCREEN_WIDTH - 27, Main.SCREEN_HEIGHT - 24, Color.GOLD, 2f);
             }
 
             if (debug_render)

@@ -42,9 +42,6 @@ public class Entity
    static int wutz_life = 3;
    static float time_blink = 0f;
 
-   // TODO: 01.05.23 fall damage
-   static float fall_distance = 0f;
-
    static float check_point_x = 0;
    static float check_point_y = 0;
 
@@ -93,6 +90,30 @@ public class Entity
       {
          case PLAYER:
          {
+            if (AI_check)
+            {
+               if (Util.simple_dist(posx, posy, World.end_x, World.end_y) < 20 * 20)
+               {
+                  if (pack)
+                  {
+                     display_message("thank you for playing!", World.end_x, World.end_y + 20);
+                  } else
+                  {
+                     display_message("where is the delivery?", World.end_x, World.end_y + 20);
+                  }
+               }
+
+               // tips
+               for (int i = 0; i < 3; i++)
+               {
+                  if (Util.simple_dist(posx, posy, World.tips_posx[i], World.tips_posy[i]) < 30 * 30)
+                  {
+                     display_message(World.tips[i], World.tips_posx[i], World.tips_posy[i]);
+                     break;
+                  }
+               }
+            }
+
             if (time_message > 0f)
             {
                time_message += delta;
@@ -106,7 +127,7 @@ public class Entity
             if (time_blink > 0f)
             {
                time_blink += delta;
-               if (time_blink >= 0.5f)
+               if (time_blink >= 0.8f)
                {
                   time_blink = 0f;
                }
@@ -269,6 +290,7 @@ public class Entity
                      anim = type.anim_idle(this);
                   }
                }
+
             }
 
             if (!falling)
@@ -302,6 +324,7 @@ public class Entity
                      }
                      World.player.posx = check_point_x;
                      World.player.posy = check_point_y;
+                     display_message("try again!", (int) check_point_x, (int) check_point_y);
                      wutz_life = 3;
                      time_blink = 0f;
                   } else

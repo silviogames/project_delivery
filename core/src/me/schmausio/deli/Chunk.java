@@ -38,35 +38,35 @@ public class Chunk
             {
                Entity entity = new Entity(px, py, Entity.EntityType.ENEMY_FLOWER);
                entity.origin_chunk = combined_pos;
-               World.list_entities.add(entity);
+               World.list_spawn.add(entity);
             }
             break;
             case BOX:
             {
                Entity entity = new Entity(px, py, Entity.EntityType.BOX);
                entity.origin_chunk = (cx << 16) | cy;
-               World.list_entities.add(entity);
+               World.list_spawn.add(entity);
             }
             break;
             case POSTBOX:
             {
                Entity entity = new Entity(px, py, Entity.EntityType.POSTBOX);
                entity.origin_chunk = (cx << 16) | cy;
-               World.list_entities.add(entity);
+               World.list_spawn.add(entity);
             }
             break;
             case COLLECT_BOX:
             {
                Entity entity = new Entity(px, py, Entity.EntityType.COLLECT_BOX);
                entity.origin_chunk = (cx << 16) | cy;
-               World.list_entities.add(entity);
+               World.list_spawn.add(entity);
             }
             break;
             case MUSHROOM:
             {
                Entity entity = new Entity(px, py, Entity.EntityType.ENEMY_MUSHROOM);
                entity.origin_chunk = combined_pos;
-               World.list_entities.add(entity);
+               World.list_spawn.add(entity);
             }
             break;
          }
@@ -196,6 +196,7 @@ public class Chunk
                   chunk.loaded_objects.add(object);
                   chunk.loaded_objects_tilex.add(ix);
                   chunk.loaded_objects_tiley.add(iy);
+                  if (object == Chunk_Object.COLLECT_BOX) World.total_collect_box++;
                }
                chunk.content.set(ix, iy, (byte) local_tile.ordinal());
 

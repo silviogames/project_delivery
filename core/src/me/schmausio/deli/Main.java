@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class Main extends ApplicationAdapter
 {
    public static SpriteBatch batch;
-
    OrthographicCamera camera;
    Viewport viewport;
 
