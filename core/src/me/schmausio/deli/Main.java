@@ -81,14 +81,6 @@ public class Main extends ApplicationAdapter
       {
          Gdx.app.exit();
       }
-
-      if (Gdx.input.isKeyJustPressed(Input.Keys.C))
-      {
-         int cx = 0;
-         int cy = 0;
-         World.list_chunks.add(new Chunk(cx, cy));
-         System.out.println("added chunk at [" + cx + "|" + cy + "]");
-      }
    }
 
    @Override

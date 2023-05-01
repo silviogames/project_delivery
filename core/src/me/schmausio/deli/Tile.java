@@ -5,21 +5,23 @@ import com.badlogic.gdx.utils.IntIntMap;
 
 public enum Tile
 {
-   AIR(Color.CLEAR, false),
-   DIRT(RenderUtil.TILE_COLOR_DIRT, true),
-   DIRT_WITH_GRAS(RenderUtil.TILE_COLOR_DIRT_WITH_GRASS, true),
-   GRASS_FLOWER(RenderUtil.TILE_COLOR_FLOWERS, false),
-   GRASS(RenderUtil.TILE_COLOR_GRASS_ONLY, false),
-   GRASS_FLOWER_TWO(RenderUtil.TILE_COLOR_GRASS_FLOWERS, false),
+   AIR(0, false),
+   DIRT(10, true),
+   DIRT_WITH_GRAS(20, true),
+   GRASS_FLOWER(30, false),
+   GRASS(40, false),
+   GRASS_FLOWER_TWO(50, false),
 
    ;
 
-   public Color tex_color;
+   // are saved in the chunk image in the R channel of the pixel!
+   public final int R_value;
+
    public final boolean collision;
 
-   Tile(Color c, boolean collision)
+   Tile(int r, boolean collision)
    {
-      this.tex_color = c;
+      this.R_value = r;
       this.collision = collision;
    }
 
@@ -28,8 +30,13 @@ public enum Tile
       for (int i = 0; i < values().length; i++)
       {
          // color rgba points to ordinal
-         color_to_tile.put(values()[i].tex_color.toIntBits(), i);
+         R_to_tile.put(values()[i].R_value, i);
       }
+   }
+
+   public static Tile from_R(int R)
+   {
+      return safe_ord(R / 10);
    }
 
    public static Tile safe_ord(int ordinal)
@@ -43,17 +50,5 @@ public enum Tile
       }
    }
 
-   static IntIntMap color_to_tile = new IntIntMap();
-
-   public static Tile from_color(Color c)
-   {
-      int ordinal = color_to_tile.get(c.toIntBits(), AIR.ordinal());
-      if (ordinal < 0 || ordinal >= values().length)
-      {
-         return AIR;
-      } else
-      {
-         return values()[ordinal];
-      }
-   }
+   static IntIntMap R_to_tile = new IntIntMap();
 }

@@ -1,41 +1,62 @@
 
 delivery.png
-size: 256, 128
+size: 512, 512
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 5x6font
   rotate: false
-  xy: 2, 20
+  xy: 104, 414
   size: 128, 64
   orig: 128, 64
   offset: 0, 0
   index: -1
 block1
   rotate: false
-  xy: 2, 2
+  xy: 104, 396
   size: 101, 16
   orig: 101, 16
   offset: 0, 0
   index: -1
 box
   rotate: false
-  xy: 189, 88
+  xy: 2, 356
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
+decoration
+  rotate: false
+  xy: 2, 378
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+enemy_flower
+  rotate: false
+  xy: 234, 454
+  size: 134, 24
+  orig: 134, 24
+  offset: 0, 0
+  index: -1
 error_frame
   rotate: false
-  xy: 132, 62
+  xy: 234, 430
   size: 16, 22
   orig: 16, 22
   offset: 0, 0
   index: -1
+particle_flower
+  rotate: false
+  xy: 465, 496
+  size: 43, 10
+  orig: 43, 10
+  offset: 0, 0
+  index: -1
 pig
   rotate: false
-  xy: 2, 86
-  size: 185, 22
-  orig: 185, 22
+  xy: 2, 480
+  size: 461, 26
+  orig: 461, 26
   offset: 0, 0
   index: -1

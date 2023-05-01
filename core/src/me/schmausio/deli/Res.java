@@ -16,8 +16,10 @@ public enum Res
    PIXEL(),
    BOX(),
    BLOCK1(Tile.values().length, 16, 16),
-   PIG(6, 30, 22),
-
+   PIG(10, 32, 26),
+   ENEMY_FLOWER(5, 26,24),
+   PARTICLE_FLOWER(4, 10,10),
+   DECORATION(2, 100,100),
    ;
 
    static final Array<Anim> load_queue = new Array<Anim>();
@@ -75,10 +77,24 @@ public enum Res
       load_queue.clear();
        */
 
+
+
       load_queue.add(Anim.PIG_IDLE);
       load_queue.add(Anim.PIG_IDLE_PACK);
       load_queue.add(Anim.PIG_RUN);
-      load_anims(PIG.region, 30, 22, 0);
+      load_queue.add(Anim.PIG_RUN_PACK);
+      load_queue.add(Anim.PIG_FALL);
+      load_queue.add(Anim.PIG_FALL_PACK);
+      load_anims(PIG.region, PIG.sheet_width, PIG.sheet_height, 0);
+      load_queue.clear();
+
+      load_queue.add(Anim.ENEMY_FLOWER_IDLE);
+      load_queue.add(Anim.ENEMY_FLOWER_RUN);
+      load_anims(ENEMY_FLOWER.region, ENEMY_FLOWER.sheet_width, ENEMY_FLOWER.sheet_height, 0);
+      load_queue.clear();
+
+      load_queue.add(Anim.PARTICLE_FLOWER);
+      load_anims(PARTICLE_FLOWER.region, PARTICLE_FLOWER.sheet_width, PARTICLE_FLOWER.sheet_height, 0);
       load_queue.clear();
    }
 

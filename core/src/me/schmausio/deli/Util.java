@@ -27,6 +27,13 @@ public class Util
       return MathUtils.round((float) Math.sqrt((double) dx + dy));
    }
 
+   public static float simple_dist(float x1, float y1, float x2, float y2)
+   {
+      float dx = (x1 - x2) * (x1 - x2);
+      float dy = (y1 - y2) * (y1 - y2);
+      return dx + dy;
+   }
+
    public static int[] RANDOM_RADIAL_OFFSET(int radius)
    {
       // THIS FILLES THE RANDOM CIRCLE, NOT ONLY ON THE CIRCLE!

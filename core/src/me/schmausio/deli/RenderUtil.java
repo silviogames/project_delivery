@@ -14,12 +14,6 @@ public class RenderUtil
 
    public final static Color[] miner_colors_trans = new Color[4];
 
-   public final static Color TILE_COLOR_DIRT = color(160, 130, 100);
-   public final static Color TILE_COLOR_DIRT_WITH_GRASS = color(100, 140, 100);
-   public final static Color TILE_COLOR_FLOWERS = color(100, 100, 100);
-   public final static Color TILE_COLOR_GRASS_ONLY = color(150, 150, 150);
-   public final static Color TILE_COLOR_GRASS_FLOWERS = color(200, 200, 200);
-
    static
    {
       color_trans_gray.a = 0.5f;
