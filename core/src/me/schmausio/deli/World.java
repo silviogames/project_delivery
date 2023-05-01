@@ -39,7 +39,6 @@ public class World
    static Array<FileHandle> list_chunk_files = new Array<>();
 
    static boolean debug_render = false;
-   static boolean debug_slow_motion = false;
 
    static Osc osc_box_hover = new Osc(3, 5, 2);
 
@@ -167,12 +166,6 @@ public class World
          break;
          case PLAY:
          {
-            if (debug_slow_motion) delta /= 10f;
-            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-            {
-               delta *= 5;
-            }
-
             for (int i = 0; i < list_entities.size; i++)
             {
                Entity ent = list_entities.get(i);
@@ -208,14 +201,14 @@ public class World
                if (chunk_check_index >= list_chunks.size) chunk_check_index = 0;
             }
 
-            if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) debug_render = !debug_render;
+            //if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) debug_render = !debug_render;
 
-            if (Gdx.input.isKeyJustPressed(Input.Keys.F4))
-            {
-               Config.load_config(true);
-            }
+            //if (Gdx.input.isKeyJustPressed(Input.Keys.F4))
+            //{
+            //Config.load_config(true);
+            //}
 
-            // TODO: 01.05.23 DEBUG REMOVE BEFORE RELEASE
+            /*
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
             {
                camera_offset_x += delta * 500;
@@ -232,11 +225,12 @@ public class World
             {
                camera_offset_y += delta * 500;
             }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.F10))
+            //if (Gdx.input.isKeyJustPressed(Input.Keys.F10))
             {
                camera_offset_x = 0;
                camera_offset_y = -50;
             }
+             */
          }
          break;
       }
@@ -279,24 +273,6 @@ public class World
                RenderUtil.render_box(Main.SCREEN_WIDTH - 75, Main.SCREEN_HEIGHT - 30, 70, 26, RenderUtil.collect_box_shadow);
                Main.batch.draw(Res.BOX.region, Main.SCREEN_WIDTH - 70, Main.SCREEN_HEIGHT - 28);
                Text.cdraw("" + Entity.num_collected_box + "/" + World.total_collect_box, Main.SCREEN_WIDTH - 27, Main.SCREEN_HEIGHT - 24, Color.GOLD, 2f);
-            }
-
-            if (debug_render)
-            {
-               int run_y = Main.SCREEN_HEIGHT;
-               int off_y = 8;
-               Text.draw("go " + MathUtils.round(global_offset_x) + "|" + MathUtils.round(global_offset_y), 2, run_y -= off_y);
-               Text.draw("vis chunks " + visible_chunks_set.size, 2, run_y -= off_y);
-               Text.draw("current chunk [" + entity_pos_to_chunk_x(player.posx) + "|" + entity_pos_to_chunk_y(player.posy) + "]", 2, run_y -= off_y);
-               Tile test_tile = get_tile(player.posx, player.posy);
-               Text.draw("test_tile " + test_tile.toString(), 2, run_y -= off_y);
-               Text.draw("player pos " + player.posx + " " + player.posy, 2, run_y -= off_y);
-               Text.draw("falling " + player.falling, 2, run_y -= off_y);
-               Text.draw("player v " + player.vx + " " + player.vy, 2, run_y -= off_y);
-               Text.draw("jump hold " + Entity.jump_hold, 2, run_y -= off_y);
-               Text.draw("jump hold time " + Entity.jump_hold_time, 2, run_y -= off_y);
-               Text.draw("num entities " + World.list_entities.size, 2, run_y -= off_y);
-               Text.draw("wutz life " + Entity.wutz_life, 2, run_y -= off_y);
             }
 
             if (Entity.time_message > 0f)

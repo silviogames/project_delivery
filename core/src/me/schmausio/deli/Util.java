@@ -80,11 +80,6 @@ public class Util
 
    public static void GEN_RECT_POSITIONS(int tilex, int tiley, int offset, int viewdir, int width, int height)
    {
-
-      // TODO: 21.04.23 implement, will be used by orogeny and by glacier.
-      //  to spawn different sized rects
-      //  this
-
       RECT_xpos.clear();
       RECT_ypos.clear();
 

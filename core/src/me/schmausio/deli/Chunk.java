@@ -41,13 +41,6 @@ public class Chunk
                World.list_spawn.add(entity);
             }
             break;
-            case BOX:
-            {
-               Entity entity = new Entity(px, py, Entity.EntityType.BOX);
-               entity.origin_chunk = (cx << 16) | cy;
-               World.list_spawn.add(entity);
-            }
-            break;
             case POSTBOX:
             {
                Entity entity = new Entity(px, py, Entity.EntityType.POSTBOX);
@@ -93,7 +86,7 @@ public class Chunk
       for (int i = 0; i < World.list_entities.size; i++)
       {
          Entity ent = World.list_entities.get(i);
-         if (ent.origin_chunk == combined_pos)
+         if (ent.origin_chunk == combined_pos && !ent.dead)
          {
             // entity was spawned from this chunk
             // if still on the chunk, remove

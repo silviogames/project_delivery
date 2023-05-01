@@ -682,7 +682,6 @@ public class Text
 				if (value == -1) break;
 				buchstabe = (char) value;
 
-				// TODO: 01.02.23 inline color will be added later, first test the system in general
 				if (buchstabe == '§')
 				{
 					//temp = Color.valueOf(txt.substring(i + 1, i + 9));

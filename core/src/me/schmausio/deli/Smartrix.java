@@ -155,7 +155,6 @@ public class Smartrix
 
    public void multi_set(int line, int... offsets_and_values)
    {
-      // TODO: 06.04.23 THIS NEEDS TESTING
       // can be used to write to multiple values in one line, but maybe it is not as readable anymore!
       if (offsets_and_values == null)
       {

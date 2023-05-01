@@ -75,11 +75,6 @@ public class Main extends ApplicationAdapter
    private void update(float delta)
    {
       World.update(delta);
-
-      if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
-      {
-         Gdx.app.exit();
-      }
    }
 
    @Override

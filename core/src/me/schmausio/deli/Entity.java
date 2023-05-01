@@ -142,9 +142,9 @@ public class Entity
             if (Gdx.input.isKeyJustPressed(Input.Keys.E))
             {
                // throwing box
-               if (pack)
+               if (pack && !World.collision(posx + (flip ? -1 : 1) * 17, posy + 12))
                {
-                  box = new Entity(posx + (flip ? -1 : 1) * 10, posy + 10, EntityType.BOX);
+                  box = new Entity(posx + (flip ? -1 : 1) * 17, posy + 12, EntityType.BOX);
                   box.vx = (flip ? -1 : 1) * (Math.abs(vx) > 0.5f ? 1.4f : 0.9f);
                   box.vy = Math.abs(vx) > 0.5f ? 3 : 1.5f;
                   box.falling = true;
@@ -158,11 +158,12 @@ public class Entity
                for (int i = 0; i < World.list_entities.size; i++)
                {
                   Entity find_box = World.list_entities.get(i);
-                  if (find_box.type == EntityType.BOX && !pack)
+                  if (!find_box.dead && find_box.type == EntityType.BOX && !pack && find_box.vx == 0 && find_box.vy == 0)
                   {
                      if (Util.simple_dist(posx, posy, find_box.posx, find_box.posy) < 16 * 16)
                      {
                         World.list_entity_index_remove.add(i);
+                        find_box.dead = true;
                         pack = true;
                         break;
                      }
@@ -173,6 +174,7 @@ public class Entity
                      {
                         Chunk collect_box_chunk = World.get_chunk(find_box.posx, find_box.posy);
                         collect_box_chunk.found_collect_box();
+                        find_box.dead = true;
                         World.list_entity_index_remove.add(i);
                         num_collected_box++;
                         break;
@@ -337,6 +339,7 @@ public class Entity
          break;
          case PARTICLE_FLOWER:
          case PARTICLE_MUSHROOM:
+         {
             anim = Anim.PARTICLE_FLOWER;
 
             if (vx != 0)
@@ -354,7 +357,8 @@ public class Entity
                   World.list_entity_index_remove.add(index);
                }
             }
-            break;
+         }
+         break;
 
          case BOX:
          {
@@ -362,6 +366,14 @@ public class Entity
             {
                vx = MathUtils.lerp(vx, 0, falling ? 0.01f : 0.5f);
                if (Math.abs(vx) < 0.001f) vx = 0;
+            }
+
+            if (!falling)
+            {
+               if (!World.collision(posx, posy - 4))
+               {
+                  falling = true;
+               }
             }
 
             if (Math.abs(vx) > 0.5f)
@@ -435,9 +447,9 @@ public class Entity
                   falling = false;
                   coyote_time = 0;
                   coyote = false;
-                  if (vy > 0)
+                  if (vy >= 0)
                   {
-                     posy = MathUtils.round(interp_posy / 16f) * 16f - 0.5f;
+                     posy = MathUtils.round(interp_posy / 16f) * 16f - 3f;
                   } else
                   {
                      posy = MathUtils.round(interp_posy / 16f) * 16f;
