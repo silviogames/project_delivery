@@ -22,6 +22,8 @@ public enum Res
    HEART(),
    POSTBOX(2, 32, 43),
    ENEMY_MUSHROOM(5, 20, 23),
+   SKY(),
+   PARTICLE_MUSHROOM(),
    ;
 
    static final Array<Anim> load_queue = new Array<Anim>();

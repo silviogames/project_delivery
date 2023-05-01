@@ -16,6 +16,7 @@ public enum Deco
 
    SIGN_RIGHT,
    SIGN_LEFT,
+   HOUSE,
    ;
 
    public static Deco from_B(int B)

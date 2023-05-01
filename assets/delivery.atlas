@@ -6,78 +6,92 @@ filter: Nearest, Nearest
 repeat: none
 5x6font
   rotate: false
-  xy: 1290, 1419
+  xy: 2, 1463
   size: 128, 64
   orig: 128, 64
   offset: 0, 0
   index: -1
 block1
   rotate: false
-  xy: 465, 1342
+  xy: 1389, 1910
   size: 135, 16
   orig: 135, 16
   offset: 0, 0
   index: -1
 box
   rotate: false
-  xy: 1290, 1372
+  xy: 540, 1809
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 decoration
   rotate: false
-  xy: 2, 1360
-  size: 1286, 123
-  orig: 1286, 123
+  xy: 2, 1831
+  size: 1385, 123
+  orig: 1385, 123
   offset: 0, 0
   index: -1
 enemy_flower
   rotate: false
-  xy: 2, 1306
+  xy: 404, 1805
   size: 134, 24
   orig: 134, 24
   offset: 0, 0
   index: -1
 enemy_mushroom
   rotate: false
-  xy: 1290, 1394
+  xy: 1852, 1931
   size: 104, 23
   orig: 104, 23
   offset: 0, 0
   index: -1
 error_frame
   rotate: false
-  xy: 1396, 1395
+  xy: 1389, 1886
   size: 16, 22
   orig: 16, 22
   offset: 0, 0
   index: -1
 heart
   rotate: false
-  xy: 138, 1306
+  xy: 404, 1779
   size: 26, 24
   orig: 26, 24
   offset: 0, 0
   index: -1
 particle_flower
   rotate: false
-  xy: 2, 1294
+  xy: 132, 1517
   size: 43, 10
   orig: 43, 10
   offset: 0, 0
   index: -1
+particle_mushroom
+  rotate: false
+  xy: 1526, 1916
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
 pig
   rotate: false
-  xy: 2, 1332
+  xy: 1389, 1928
   size: 461, 26
   orig: 461, 26
   offset: 0, 0
   index: -1
 postbox
   rotate: false
-  xy: 1420, 1440
+  xy: 2, 1418
   size: 65, 43
   orig: 65, 43
+  offset: 0, 0
+  index: -1
+sky
+  rotate: false
+  xy: 2, 1529
+  size: 400, 300
+  orig: 400, 300
   offset: 0, 0
   index: -1

@@ -50,11 +50,14 @@ public class Entity
 
    static int num_collected_box = 0;
 
+   float despawn_time = 0f;
+
    // postbox
    boolean postbox_active = false;
 
    static String message = "";
    static float time_message = 0f;
+   static int message_posx, message_posy;
 
    static
    {
@@ -90,6 +93,16 @@ public class Entity
       {
          case PLAYER:
          {
+            if (time_message > 0f)
+            {
+               time_message += delta;
+               if (time_message >= 5f)
+               {
+                  time_message = 0f;
+                  message = "";
+               }
+            }
+
             if (time_blink > 0f)
             {
                time_blink += delta;
@@ -105,10 +118,6 @@ public class Entity
                this.posy = check_point_y;
             }
 
-            if (World.debug_render && Gdx.input.isKeyJustPressed(Input.Keys.TAB))
-            {
-            }
-
             if (Gdx.input.isKeyJustPressed(Input.Keys.E))
             {
                // throwing box
@@ -118,7 +127,7 @@ public class Entity
                   box.vx = (flip ? -1 : 1) * (Math.abs(vx) > 0.5f ? 1.4f : 0.9f);
                   box.vy = Math.abs(vx) > 0.5f ? 3 : 1.5f;
                   box.falling = true;
-                  World.list_entities.add(box);
+                  World.list_spawn.add(box);
                   pack = false;
                }
             }
@@ -157,7 +166,7 @@ public class Entity
                            find_box.postbox_active = true;
                            check_point_x = find_box.posx;
                            check_point_y = find_box.posy + 5;
-                           System.out.println("CHECKPOINT!");
+                           display_message("CHECKPOINT!", (int) find_box.posx, (int) find_box.posy);
                            break;
                         }
                      }
@@ -304,6 +313,7 @@ public class Entity
          }
          break;
          case PARTICLE_FLOWER:
+         case PARTICLE_MUSHROOM:
             anim = Anim.PARTICLE_FLOWER;
 
             if (vx != 0)
@@ -314,8 +324,12 @@ public class Entity
 
             if (vx == 0 && vy == 0)
             {
-               dead = true;
-               World.list_entity_index_remove.add(index);
+               despawn_time += delta;
+               if (despawn_time >= 1f)
+               {
+                  dead = true;
+                  World.list_entity_index_remove.add(index);
+               }
             }
             break;
 
@@ -344,6 +358,15 @@ public class Entity
                            for (int j = 0; j < MathUtils.random(10, 20); j++)
                            {
                               Entity particle_flower = new Entity(enemy.posx, enemy.posy, EntityType.PARTICLE_FLOWER);
+                              particle_flower.vx = MathUtils.random(-2, 2);
+                              particle_flower.vy = Config.CONF.UP_SPEED_PARTICLE_FLOWER.value * MathUtils.random(0.5f, 1f);
+                              World.list_spawn.add(particle_flower);
+                           }
+                        } else if (enemy.type == EntityType.ENEMY_MUSHROOM)
+                        {
+                           for (int j = 0; j < MathUtils.random(7, 15); j++)
+                           {
+                              Entity particle_flower = new Entity(enemy.posx, enemy.posy, EntityType.PARTICLE_MUSHROOM);
                               particle_flower.vx = MathUtils.random(-2, 2);
                               particle_flower.vy = Config.CONF.UP_SPEED_PARTICLE_FLOWER.value * MathUtils.random(0.5f, 1f);
                               World.list_spawn.add(particle_flower);
@@ -446,11 +469,31 @@ public class Entity
          }
          break;
          case ENEMY_FLOWER:
-         case PARTICLE_FLOWER:
          case ENEMY_MUSHROOM:
          {
             TextureRegion reg = Res.get_frame(anim_time, anim, flip);
             Main.batch.draw(reg, px - reg.getRegionWidth() / 2f, py);
+         }
+         break;
+         case PARTICLE_FLOWER:
+         {
+            if (despawn_time > 0f)
+            {
+               Main.batch.setColor(1f, 1f, 1f, 1f - MathUtils.clamp(despawn_time, 0f, 1f));
+            }
+            TextureRegion reg = Res.get_frame(anim_time, anim, flip);
+            Main.batch.draw(reg, px - reg.getRegionWidth() / 2f, py);
+            Main.batch.setColor(Color.WHITE);
+         }
+         break;
+         case PARTICLE_MUSHROOM:
+         {
+            if (despawn_time > 0f)
+            {
+               Main.batch.setColor(1f, 1f, 1f, 1f - MathUtils.clamp(despawn_time, 0f, 1f));
+            }
+            Main.batch.draw(Res.PARTICLE_MUSHROOM.region, px - 5, py);
+            Main.batch.setColor(Color.WHITE);
          }
          break;
          case BOX:
@@ -467,6 +510,15 @@ public class Entity
       }
    }
 
+   public static void display_message(String message, int message_posx, int message_posy)
+   {
+      time_message = 0.1f;
+      Entity.message = message;
+      Entity.message_posx = message_posx;
+      Entity.message_posy = message_posy;
+   }
+
+
    public enum EntityType
    {
       PLAYER(true, false, false),
@@ -478,6 +530,7 @@ public class Entity
       COLLECT_BOX(false, false, false),
 
       ENEMY_MUSHROOM(true, true, false),
+      PARTICLE_MUSHROOM(true, false, true),
       ;
 
       public final boolean gravity_affected;

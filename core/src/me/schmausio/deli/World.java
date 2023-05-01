@@ -228,14 +228,7 @@ public class World
       {
          case PLAY:
          {
-
-            // SKY GRADIENT
-            for (int i = 0; i < Main.SCREEN_HEIGHT; i++)
-            {
-               RenderUtil.interp_color(Color.NAVY, Color.SKY, RenderUtil.color_sky_interp, i / 400f);
-
-               RenderUtil.render_box(0, i, Main.SCREEN_WIDTH, 1, RenderUtil.color_sky_interp);
-            }
+            Main.batch.draw(Res.SKY.region, 0, 0);
 
             global_offset_x = -player.posx + Main.SCREEN_WIDTH / 2f + camera_offset_x;
             global_offset_y = -player.posy + Main.SCREEN_HEIGHT / 2f + camera_offset_y;
@@ -264,8 +257,8 @@ public class World
             if (Entity.num_collected_box > 0)
             {
                RenderUtil.render_box(Main.SCREEN_WIDTH - 55, Main.SCREEN_HEIGHT - 30, 50, 26, RenderUtil.collect_box_shadow);
-               Main.batch.draw(Res.BOX.region,Main.SCREEN_WIDTH - 50, Main.SCREEN_HEIGHT - 28 );
-               Text.cdraw(""+Entity.num_collected_box, Main.SCREEN_WIDTH - 17, Main.SCREEN_HEIGHT - 24, Color.GOLD, 2f);
+               Main.batch.draw(Res.BOX.region, Main.SCREEN_WIDTH - 50, Main.SCREEN_HEIGHT - 28);
+               Text.cdraw("" + Entity.num_collected_box, Main.SCREEN_WIDTH - 17, Main.SCREEN_HEIGHT - 24, Color.GOLD, 2f);
             }
 
             if (debug_render)
@@ -284,6 +277,13 @@ public class World
                Text.draw("jump hold time " + Entity.jump_hold_time, 2, run_y -= off_y);
                Text.draw("num entities " + World.list_entities.size, 2, run_y -= off_y);
                Text.draw("wutz life " + Entity.wutz_life, 2, run_y -= off_y);
+            }
+
+            if (Entity.time_message > 0f)
+            {
+               int px = (int) World.global_offset_x + Entity.message_posx;
+               int py = (int) World.global_offset_y + Entity.message_posy;
+               Text.cdraw(Entity.message, px, py + 45, Color.GOLD, 1.5f);
             }
          }
          break;
