@@ -229,22 +229,12 @@ public class World
          case PLAY:
          {
 
-            if (debug_render)
+            // SKY GRADIENT
+            for (int i = 0; i < Main.SCREEN_HEIGHT; i++)
             {
-               int run_y = Main.SCREEN_HEIGHT;
-               int off_y = 8;
-               Text.draw("go " + MathUtils.round(global_offset_x) + "|" + MathUtils.round(global_offset_y), 2, run_y -= off_y);
-               Text.draw("vis chunks " + visible_chunks_set.size, 2, run_y -= off_y);
-               Text.draw("current chunk [" + entity_pos_to_chunk_x(player.posx) + "|" + entity_pos_to_chunk_y(player.posy) + "]", 2, run_y -= off_y);
-               Tile test_tile = get_tile(player.posx, player.posy);
-               Text.draw("test_tile " + test_tile.toString(), 2, run_y -= off_y);
-               Text.draw("player pos " + player.posx + " " + player.posy, 2, run_y -= off_y);
-               Text.draw("falling " + player.falling, 2, run_y -= off_y);
-               Text.draw("player v " + player.vx + " " + player.vy, 2, run_y -= off_y);
-               Text.draw("jump hold " + Entity.jump_hold, 2, run_y -= off_y);
-               Text.draw("jump hold time " + Entity.jump_hold_time, 2, run_y -= off_y);
-               Text.draw("num entities " + World.list_entities.size, 2, run_y -= off_y);
-               Text.draw("wutz life " + Entity.wutz_life, 2, run_y -= off_y);
+               RenderUtil.interp_color(Color.NAVY, Color.SKY, RenderUtil.color_sky_interp, i / 400f);
+
+               RenderUtil.render_box(0, i, Main.SCREEN_WIDTH, 1, RenderUtil.color_sky_interp);
             }
 
             global_offset_x = -player.posx + Main.SCREEN_WIDTH / 2f + camera_offset_x;
@@ -266,15 +256,34 @@ public class World
 
             for (int i = 1; i <= 3; i++)
             {
-               Color color_heart = Color.WHITE;
-               if(i<= Entity.wutz_life){
-                  color_heart = Color.SALMON;
-               }else{
-                  color_heart = Color.FIREBRICK;
-               }
+               Main.batch.setColor(i <= Entity.wutz_life ? Color.WHITE : Color.DARK_GRAY);
+               Main.batch.draw(Res.HEART.region, i * 18 - 16, Main.SCREEN_HEIGHT - 20, 16, 16);
+               Main.batch.setColor(Color.WHITE);
+            }
 
-               // TODO: 01.05.23 render heart
-               RenderUtil.render_box( i * 20 - 16, Main.SCREEN_HEIGHT - 20, 16,16,color_heart);
+            if (Entity.num_collected_box > 0)
+            {
+               RenderUtil.render_box(Main.SCREEN_WIDTH - 55, Main.SCREEN_HEIGHT - 30, 50, 26, RenderUtil.collect_box_shadow);
+               Main.batch.draw(Res.BOX.region,Main.SCREEN_WIDTH - 50, Main.SCREEN_HEIGHT - 28 );
+               Text.cdraw(""+Entity.num_collected_box, Main.SCREEN_WIDTH - 17, Main.SCREEN_HEIGHT - 24, Color.GOLD, 2f);
+            }
+
+            if (debug_render)
+            {
+               int run_y = Main.SCREEN_HEIGHT;
+               int off_y = 8;
+               Text.draw("go " + MathUtils.round(global_offset_x) + "|" + MathUtils.round(global_offset_y), 2, run_y -= off_y);
+               Text.draw("vis chunks " + visible_chunks_set.size, 2, run_y -= off_y);
+               Text.draw("current chunk [" + entity_pos_to_chunk_x(player.posx) + "|" + entity_pos_to_chunk_y(player.posy) + "]", 2, run_y -= off_y);
+               Tile test_tile = get_tile(player.posx, player.posy);
+               Text.draw("test_tile " + test_tile.toString(), 2, run_y -= off_y);
+               Text.draw("player pos " + player.posx + " " + player.posy, 2, run_y -= off_y);
+               Text.draw("falling " + player.falling, 2, run_y -= off_y);
+               Text.draw("player v " + player.vx + " " + player.vy, 2, run_y -= off_y);
+               Text.draw("jump hold " + Entity.jump_hold, 2, run_y -= off_y);
+               Text.draw("jump hold time " + Entity.jump_hold_time, 2, run_y -= off_y);
+               Text.draw("num entities " + World.list_entities.size, 2, run_y -= off_y);
+               Text.draw("wutz life " + Entity.wutz_life, 2, run_y -= off_y);
             }
          }
          break;

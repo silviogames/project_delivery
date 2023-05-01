@@ -48,6 +48,35 @@ public class Chunk
                World.list_entities.add(entity);
             }
             break;
+            case POSTBOX:
+            {
+               Entity entity = new Entity(px, py, Entity.EntityType.POSTBOX);
+               entity.origin_chunk = (cx << 16) | cy;
+               World.list_entities.add(entity);
+            }
+            break;
+            case COLLECT_BOX:
+            {
+               Entity entity = new Entity(px, py, Entity.EntityType.COLLECT_BOX);
+               entity.origin_chunk = (cx << 16) | cy;
+               World.list_entities.add(entity);
+            }
+            break;
+         }
+      }
+   }
+
+   public void found_collect_box()
+   {
+      // player found the box of this chunk, prevent it from respawning, by removing it from the loaded list
+      for (int i = 0; i < loaded_objects.size; i++)
+      {
+         if (loaded_objects.get(i) == Chunk_Object.COLLECT_BOX)
+         {
+            loaded_objects.removeIndex(i);
+            loaded_objects_tilex.removeIndex(i);
+            loaded_objects_tiley.removeIndex(i);
+            break;
          }
       }
    }
@@ -178,6 +207,9 @@ public class Chunk
       NONE,
       BOX,
       ENEMY_FLOWER,
+
+      POSTBOX,
+      COLLECT_BOX,
       ;
 
       public static Chunk_Object safe_ord(int ordinal)

@@ -6,57 +6,71 @@ filter: Nearest, Nearest
 repeat: none
 5x6font
   rotate: false
-  xy: 1092, 1176
+  xy: 1290, 1397
   size: 128, 64
   orig: 128, 64
   offset: 0, 0
   index: -1
 block1
   rotate: false
-  xy: 465, 1099
+  xy: 465, 1320
   size: 118, 16
   orig: 118, 16
   offset: 0, 0
   index: -1
 box
   rotate: false
-  xy: 1222, 1220
+  xy: 138, 1288
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 decoration
   rotate: false
-  xy: 2, 1117
-  size: 1088, 123
-  orig: 1088, 123
+  xy: 2, 1338
+  size: 1286, 123
+  orig: 1286, 123
   offset: 0, 0
   index: -1
 enemy_flower
   rotate: false
-  xy: 2, 1063
+  xy: 2, 1284
   size: 134, 24
   orig: 134, 24
   offset: 0, 0
   index: -1
 error_frame
   rotate: false
-  xy: 2, 1039
+  xy: 1357, 1373
   size: 16, 22
   orig: 16, 22
   offset: 0, 0
   index: -1
+heart
+  rotate: false
+  xy: 2, 1258
+  size: 26, 24
+  orig: 26, 24
+  offset: 0, 0
+  index: -1
 particle_flower
   rotate: false
-  xy: 1092, 1164
+  xy: 1420, 1451
   size: 43, 10
   orig: 43, 10
   offset: 0, 0
   index: -1
 pig
   rotate: false
-  xy: 2, 1089
+  xy: 2, 1310
   size: 461, 26
   orig: 461, 26
+  offset: 0, 0
+  index: -1
+postbox
+  rotate: false
+  xy: 1290, 1352
+  size: 65, 43
+  orig: 65, 43
   offset: 0, 0
   index: -1

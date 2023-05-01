@@ -13,6 +13,9 @@ public enum Deco
    MUSHROOM_3,
    MUSHROOM_4,
    MUSHROOM_5,
+
+   SIGN_RIGHT,
+   SIGN_LEFT,
    ;
 
    public static Deco from_B(int B)

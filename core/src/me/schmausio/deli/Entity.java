@@ -48,6 +48,11 @@ public class Entity
    static float check_point_x = 0;
    static float check_point_y = 0;
 
+   static int num_collected_box = 0;
+
+   // postbox
+   boolean postbox_active = false;
+
    static
    {
       int spawn_chunk_x = 0;
@@ -93,12 +98,8 @@ public class Entity
 
             if (posy < -300)
             {
-               int spawn_chunk_x = 0;
-               int spawn_chunk_y = 5;
-               int tilex_offset = 20;
-               int tiley_offset = 14;
-               this.posx = spawn_chunk_x * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE + tilex_offset * Chunk.TILE_SIZE;
-               this.posy = spawn_chunk_y * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE + tiley_offset * Chunk.TILE_SIZE;
+               this.posx = check_point_x;
+               this.posy = check_point_y;
             }
 
             if (World.debug_render && Gdx.input.isKeyJustPressed(Input.Keys.TAB))
@@ -119,18 +120,43 @@ public class Entity
                }
             }
 
-            if (AI_check && !pack)
+            if (AI_check)
             {
                for (int i = 0; i < World.list_entities.size; i++)
                {
                   Entity find_box = World.list_entities.get(i);
-                  if (find_box.type == EntityType.BOX)
+                  if (find_box.type == EntityType.BOX && !pack)
                   {
                      if (Util.simple_dist(posx, posy, find_box.posx, find_box.posy) < 16 * 16)
                      {
                         World.list_entity_index_remove.add(i);
                         pack = true;
                         break;
+                     }
+                  }
+                  if (find_box.type == EntityType.COLLECT_BOX)
+                  {
+                     if (Util.simple_dist(posx, posy, find_box.posx, find_box.posy) < 16 * 16)
+                     {
+                        Chunk collect_box_chunk = World.get_chunk(find_box.posx, find_box.posy);
+                        collect_box_chunk.found_collect_box();
+                        World.list_entity_index_remove.add(i);
+                        num_collected_box++;
+                        break;
+                     }
+                  }
+                  if (find_box.type == EntityType.POSTBOX)
+                  {
+                     if (Util.simple_dist(posx, posy, find_box.posx, find_box.posy) < 20 * 20)
+                     {
+                        if (!find_box.postbox_active)
+                        {
+                           find_box.postbox_active = true;
+                           check_point_x = find_box.posx;
+                           check_point_y = find_box.posy + 5;
+                           System.out.println("CHECKPOINT!");
+                           break;
+                        }
                      }
                   }
                }
@@ -414,6 +440,12 @@ public class Entity
             Main.batch.draw(Res.BOX.region, px - Res.BOX.region.getRegionWidth() / 2f, py + World.osc_box_hover.value());
          }
          break;
+         case POSTBOX:
+            Main.batch.draw(Res.POSTBOX.sheet[postbox_active ? 1 : 0], px - Res.POSTBOX.region.getRegionWidth() / 2f, py);
+            break;
+         case COLLECT_BOX:
+            Main.batch.draw(Res.BOX.region, px - Res.BOX.region.getRegionWidth() / 2f, py + World.osc_box_hover.value());
+            break;
       }
    }
 
@@ -424,6 +456,8 @@ public class Entity
       ENEMY_FLOWER(true, true, false),
 
       PARTICLE_FLOWER(true, false, true),
+      POSTBOX(false, false, false),
+      COLLECT_BOX(false, false, false),
       ;
 
       public final boolean gravity_affected;

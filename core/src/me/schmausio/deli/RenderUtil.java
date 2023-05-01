@@ -16,6 +16,10 @@ public class RenderUtil
 
    public final static Color color_blink = Color.WHITE.cpy();
 
+   public final static Color color_sky_interp = Color.SKY.cpy();
+
+   public final static Color collect_box_shadow = Color.DARK_GRAY.cpy();
+
    static
    {
       color_trans_gray.a = 0.5f;
@@ -35,6 +39,8 @@ public class RenderUtil
       miner_colors_trans[3].a = 0.5f;
 
       color_blink.a = 0.3f;
+
+      collect_box_shadow.a = 0.7f;
    }
 
    public static Color color(int R, int G, int B)
@@ -86,5 +92,12 @@ public class RenderUtil
       // little helper function to transform from a float that represents time of the animation to frame
       float frame_float = MathUtils.map(0f, time_max, 0, num_frames, time);
       return MathUtils.clamp(MathUtils.floor(frame_float), 0, num_frames - 1);
+   }
+
+   public static void interp_color(Color from, Color to, Color color, float interp)
+   {
+      color.r = MathUtils.lerp(from.r, to.r, interp);
+      color.g = MathUtils.lerp(from.g, to.g, interp);
+      color.b = MathUtils.lerp(from.b, to.b, interp);
    }
 }

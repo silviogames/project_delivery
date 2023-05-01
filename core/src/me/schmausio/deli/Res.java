@@ -16,9 +16,11 @@ public enum Res
    BOX(),
    BLOCK1(Tile.values().length, 16, 16),
    PIG(10, 32, 26),
-   ENEMY_FLOWER(5, 26,24),
-   PARTICLE_FLOWER(4, 10,10),
-   DECORATION(11, 98,123),
+   ENEMY_FLOWER(5, 26, 24),
+   PARTICLE_FLOWER(4, 10, 10),
+   DECORATION(Deco.values().length, 98, 123),
+   HEART(),
+   POSTBOX(2, 32, 43),
    ;
 
    static final Array<Anim> load_queue = new Array<Anim>();
@@ -75,7 +77,6 @@ public enum Res
       load_anims(atlas.findRegion("guy"), 32, 34, 0);
       load_queue.clear();
        */
-
 
 
       load_queue.add(Anim.PIG_IDLE);
