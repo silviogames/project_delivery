@@ -1,6 +1,1 @@
-
-
-- BUGS:
-- can get stuck in walls
-
 - remove all debug commands before release

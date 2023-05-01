@@ -228,6 +228,7 @@ public class World
       {
          case PLAY:
          {
+
             if (debug_render)
             {
                int run_y = Main.SCREEN_HEIGHT;
@@ -237,10 +238,13 @@ public class World
                Text.draw("current chunk [" + entity_pos_to_chunk_x(player.posx) + "|" + entity_pos_to_chunk_y(player.posy) + "]", 2, run_y -= off_y);
                Tile test_tile = get_tile(player.posx, player.posy);
                Text.draw("test_tile " + test_tile.toString(), 2, run_y -= off_y);
+               Text.draw("player pos " + player.posx + " " + player.posy, 2, run_y -= off_y);
+               Text.draw("falling " + player.falling, 2, run_y -= off_y);
                Text.draw("player v " + player.vx + " " + player.vy, 2, run_y -= off_y);
                Text.draw("jump hold " + Entity.jump_hold, 2, run_y -= off_y);
                Text.draw("jump hold time " + Entity.jump_hold_time, 2, run_y -= off_y);
                Text.draw("num entities " + World.list_entities.size, 2, run_y -= off_y);
+               Text.draw("wutz life " + Entity.wutz_life, 2, run_y -= off_y);
             }
 
             global_offset_x = -player.posx + Main.SCREEN_WIDTH / 2f + camera_offset_x;
@@ -258,6 +262,19 @@ public class World
             {
                Entity ent = list_entities.get(i);
                ent.render();
+            }
+
+            for (int i = 1; i <= 3; i++)
+            {
+               Color color_heart = Color.WHITE;
+               if(i<= Entity.wutz_life){
+                  color_heart = Color.SALMON;
+               }else{
+                  color_heart = Color.FIREBRICK;
+               }
+
+               // TODO: 01.05.23 render heart
+               RenderUtil.render_box( i * 20 - 16, Main.SCREEN_HEIGHT - 20, 16,16,color_heart);
             }
          }
          break;

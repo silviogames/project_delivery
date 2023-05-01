@@ -14,6 +14,8 @@ public class RenderUtil
 
    public final static Color[] miner_colors_trans = new Color[4];
 
+   public final static Color color_blink = Color.WHITE.cpy();
+
    static
    {
       color_trans_gray.a = 0.5f;
@@ -31,6 +33,8 @@ public class RenderUtil
       miner_colors_trans[2].a = 0.5f;
       miner_colors_trans[3] = Color.GOLD.cpy();
       miner_colors_trans[3].a = 0.5f;
+
+      color_blink.a = 0.3f;
    }
 
    public static Color color(int R, int G, int B)

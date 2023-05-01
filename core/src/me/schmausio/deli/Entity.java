@@ -2,6 +2,7 @@ package me.schmausio.deli;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 
@@ -38,6 +39,25 @@ public class Entity
 
    boolean dead = false;
 
+   static int wutz_life = 3;
+   static float time_blink = 0f;
+
+   // TODO: 01.05.23 fall damage
+   static float fall_distance = 0f;
+
+   static float check_point_x = 0;
+   static float check_point_y = 0;
+
+   static
+   {
+      int spawn_chunk_x = 0;
+      int spawn_chunk_y = 5;
+      int tilex_offset = 20;
+      int tiley_offset = 14;
+      check_point_x = spawn_chunk_x * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE + tilex_offset * Chunk.TILE_SIZE;
+      check_point_y = spawn_chunk_y * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE + tiley_offset * Chunk.TILE_SIZE;
+   }
+
    public Entity(float posx, float posy, EntityType type)
    {
       this.posx = posx;
@@ -47,12 +67,8 @@ public class Entity
       switch (type)
       {
          case PLAYER:
-            int spawn_chunk_x = 0;
-            int spawn_chunk_y = 5;
-            int tilex_offset = 20;
-            int tiley_offset = 14;
-            this.posx = spawn_chunk_x * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE + tilex_offset * Chunk.TILE_SIZE;
-            this.posy = spawn_chunk_y * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE + tiley_offset * Chunk.TILE_SIZE;
+            this.posx = check_point_x;
+            this.posy = check_point_y;
             break;
       }
       anim = type.anim_idle(this);
@@ -66,6 +82,15 @@ public class Entity
       {
          case PLAYER:
          {
+            if (time_blink > 0f)
+            {
+               time_blink += delta;
+               if (time_blink >= 0.5f)
+               {
+                  time_blink = 0f;
+               }
+            }
+
             if (posy < -300)
             {
                int spawn_chunk_x = 0;
@@ -186,19 +211,6 @@ public class Entity
             {
                anim = pack ? Anim.PIG_FALL_PACK : Anim.PIG_FALL;
             }
-
-            if(AI_check){
-               if(pressing_move){
-
-                  float left_nx = posx - 1;
-                  float right_nx = posx + 1;
-                  boolean coll_left = World.collision(left_nx, posy);
-                  boolean coll_right = World.collision(right_nx, posy);
-                  if(coll_left && coll_right){
-                     System.out.println("STUCK!");
-                  }
-               }
-            }
          }
          break;
          case ENEMY_FLOWER:
@@ -218,9 +230,32 @@ public class Entity
                      anim = type.anim_idle(this);
                   }
                }
-               if (Util.simple_dist(posx, posy, World.player.posx, World.player.posy) < 10 * 10)
+            }
+
+            if (!falling)
+            {
+               if (!World.collision(posx, posy - 4))
                {
-                  // TODO: 01.05.23 do damage
+                  falling = true;
+               }
+            }
+
+            // every frame!
+            if (Util.simple_dist(posx, posy, World.player.posx, World.player.posy) < Config.CONF.PIG_HIT_RADIUS.value)
+            {
+               if (time_blink == 0f)
+               {
+                  wutz_life--;
+                  if (wutz_life <= 0)
+                  {
+                     World.player.posx = check_point_x;
+                     World.player.posy = check_point_y;
+                     wutz_life = 3;
+                     time_blink = 0f;
+                  } else
+                  {
+                     time_blink = 0.01f;
+                  }
                }
             }
          }
@@ -296,6 +331,7 @@ public class Entity
 
          boolean collision_hori = World.collision(nx, posy);
          boolean collision_vert = World.collision(posx, ny);
+         boolean collision_vert2 = World.collision(nx, ny);
 
          int num_pixels_per_move = MathUtils.floor(Math.abs(posy - ny));
 
@@ -305,19 +341,18 @@ public class Entity
             for (int i = 0; i < num_pixels_per_move; i++)
             {
                float interp_posy = MathUtils.lerp(posy, ny, i / ((float) (num_pixels_per_move - 1)));
-               if (World.collision(nx, interp_posy))
+               if (World.collision(posx, interp_posy))
                {
                   falling = false;
                   coyote_time = 0;
                   coyote = false;
                   if (vy > 0)
                   {
-                     posy = MathUtils.round(interp_posy / 16f) * 16f - 1;
+                     posy = MathUtils.round(interp_posy / 16f) * 16f - 0.5f;
                   } else
                   {
                      posy = MathUtils.round(interp_posy / 16f) * 16f;
                   }
-
                   vy = 0;
                   collided = true;
                   break;
@@ -359,6 +394,14 @@ public class Entity
       switch (type)
       {
          case PLAYER:
+         {
+            boolean blink = time_blink > 0f && MathUtils.floor(time_blink / 0.07f) % 2 == 0;
+            Main.batch.setColor(blink ? RenderUtil.color_blink : Color.WHITE);
+            TextureRegion reg = Res.get_frame(anim_time, anim, flip);
+            Main.batch.draw(reg, px - reg.getRegionWidth() / 2f, py);
+            Main.batch.setColor(Color.WHITE);
+         }
+         break;
          case ENEMY_FLOWER:
          case PARTICLE_FLOWER:
          {
