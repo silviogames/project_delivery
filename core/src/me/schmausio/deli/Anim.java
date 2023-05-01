@@ -12,11 +12,13 @@ public enum Anim
    PIG_FALL(2, 0.1f, -1, true, 0, 1),
    PIG_FALL_PACK(3, 0.1f, -1, true, 0, 1),
 
-   ENEMY_FLOWER_IDLE(2, 0.2f, -1, false, 0,1),
-   ENEMY_FLOWER_RUN(3, 0.15f, -1, false, 0,1,2),
+   ENEMY_FLOWER_IDLE(2, 0.2f, -1, false, 0, 1),
+   ENEMY_FLOWER_RUN(3, 0.15f, -1, false, 0, 1, 2),
 
-   PARTICLE_FLOWER(4, 0.08f, -1, false, 0,1,2,3,2,1),
+   PARTICLE_FLOWER(4, 0.08f, -1, false, 0, 1, 2, 3, 2, 1),
 
+   ENEMY_MUSHROOM_IDLE(2, 0.2f, -1, false, 0, 1),
+   ENEMY_MUSHROOM_RUN(3, 0.15f, -1, true, 0, 1, 2, 1),
    ;
    public static float[] returner = new float[3];
    public final int keyframe, num_frames; // number of individual frames, may appear more than once in anim

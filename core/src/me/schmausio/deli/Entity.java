@@ -27,7 +27,7 @@ public class Entity
 
    boolean flip = false;
 
-   boolean pack = true;
+   static boolean pack = true;
 
    // combined value of the chunk
    public int origin_chunk = -1;
@@ -240,6 +240,7 @@ public class Entity
          }
          break;
          case ENEMY_FLOWER:
+         case ENEMY_MUSHROOM:
          {
             if (AI_check)
             {
@@ -274,6 +275,19 @@ public class Entity
                   wutz_life--;
                   if (wutz_life <= 0)
                   {
+                     if (!pack)
+                     {
+                        for (int i = 0; i < World.list_entities.size; i++)
+                        {
+                           if (World.list_entities.get(i).type == EntityType.BOX)
+                           {
+                              World.list_entity_index_remove.add(i);
+                              World.list_entities.get(i).dead = true;
+                              break;
+                           }
+                        }
+                        pack = true;
+                     }
                      World.player.posx = check_point_x;
                      World.player.posy = check_point_y;
                      wutz_life = 3;
@@ -430,6 +444,7 @@ public class Entity
          break;
          case ENEMY_FLOWER:
          case PARTICLE_FLOWER:
+         case ENEMY_MUSHROOM:
          {
             TextureRegion reg = Res.get_frame(anim_time, anim, flip);
             Main.batch.draw(reg, px - reg.getRegionWidth() / 2f, py);
@@ -458,6 +473,8 @@ public class Entity
       PARTICLE_FLOWER(true, false, true),
       POSTBOX(false, false, false),
       COLLECT_BOX(false, false, false),
+
+      ENEMY_MUSHROOM(true, true, false),
       ;
 
       public final boolean gravity_affected;
@@ -489,6 +506,9 @@ public class Entity
             case PARTICLE_FLOWER:
                ret = Config.CONF.WALK_SPEED_PARTICLE_FLOWER.value;
                break;
+            case ENEMY_MUSHROOM:
+               ret = Config.CONF.WALK_SPEED_FLOWER.value + 20;
+               break;
          }
          return ret;
       }
@@ -499,10 +519,13 @@ public class Entity
          switch (this)
          {
             case PLAYER:
-               ret = ent.pack ? Anim.PIG_IDLE_PACK : Anim.PIG_IDLE;
+               ret = Entity.pack ? Anim.PIG_IDLE_PACK : Anim.PIG_IDLE;
                break;
             case ENEMY_FLOWER:
                ret = Anim.ENEMY_FLOWER_IDLE;
+               break;
+            case ENEMY_MUSHROOM:
+               ret = Anim.ENEMY_MUSHROOM_IDLE;
                break;
          }
          return ret;
@@ -518,6 +541,9 @@ public class Entity
                break;
             case ENEMY_FLOWER:
                ret = Anim.ENEMY_FLOWER_RUN;
+               break;
+            case ENEMY_MUSHROOM:
+               ret = Anim.ENEMY_MUSHROOM_RUN;
                break;
          }
          return ret;

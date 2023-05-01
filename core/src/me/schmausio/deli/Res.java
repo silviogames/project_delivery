@@ -21,6 +21,7 @@ public enum Res
    DECORATION(Deco.values().length, 98, 123),
    HEART(),
    POSTBOX(2, 32, 43),
+   ENEMY_MUSHROOM(5, 20, 23),
    ;
 
    static final Array<Anim> load_queue = new Array<Anim>();
@@ -95,6 +96,11 @@ public enum Res
 
       load_queue.add(Anim.PARTICLE_FLOWER);
       load_anims(PARTICLE_FLOWER.region, PARTICLE_FLOWER.sheet_width, PARTICLE_FLOWER.sheet_height, 0);
+      load_queue.clear();
+
+      load_queue.add(Anim.ENEMY_MUSHROOM_IDLE);
+      load_queue.add(Anim.ENEMY_MUSHROOM_RUN);
+      load_anims(ENEMY_MUSHROOM.region, ENEMY_MUSHROOM.sheet_width, ENEMY_MUSHROOM.sheet_height, 0);
       load_queue.clear();
    }
 

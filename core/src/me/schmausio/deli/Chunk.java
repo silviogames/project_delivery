@@ -62,6 +62,13 @@ public class Chunk
                World.list_entities.add(entity);
             }
             break;
+            case MUSHROOM:
+            {
+               Entity entity = new Entity(px, py, Entity.EntityType.ENEMY_MUSHROOM);
+               entity.origin_chunk = combined_pos;
+               World.list_entities.add(entity);
+            }
+            break;
          }
       }
    }
@@ -210,6 +217,8 @@ public class Chunk
 
       POSTBOX,
       COLLECT_BOX,
+
+      MUSHROOM,
       ;
 
       public static Chunk_Object safe_ord(int ordinal)
