@@ -6,6 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.IntSet;
 
@@ -21,7 +22,7 @@ public class World
    static int chunk_check_index = 0;
 
    public static float global_offset_x, global_offset_y;
-   public static float camera_offset_x, camera_offset_y;
+   public static float camera_offset_x, camera_offset_y = -50;
 
    public static WorldStatus status;
 
@@ -30,11 +31,17 @@ public class World
    static Entity player = new Entity(0, 0, Entity.EntityType.PLAYER);
 
    public static Array<Entity> list_entities = new Array<>();
+   // used for copy
+   public static IntArray list_entity_index_remove = new IntArray();
+
+   public static Array<Entity> list_spawn = new Array<>();
 
    static Array<FileHandle> list_chunk_files = new Array<>();
 
    static boolean debug_render = true;
    static boolean debug_slow_motion = false;
+
+   static Osc osc_box_hover = new Osc(3, 5, 2);
 
    static
    {
@@ -102,6 +109,14 @@ public class World
 
    public static void update(float delta)
    {
+      osc_box_hover.update(delta);
+
+      Entity.AI_check = false;
+      if (Entity.timer_AI.update(delta))
+      {
+         Entity.AI_check = true;
+      }
+
       switch (status)
       {
          case LOAD_CHUNKS:
@@ -113,7 +128,7 @@ public class World
             } else
             {
                FileHandle chunk_file = list_chunk_files.pop();
-               if (chunk_file.extension().equals("png") && chunk_file.nameWithoutExtension().length() == 7)
+               if (chunk_file.extension().equals("png") && chunk_file.nameWithoutExtension().length() == 9)
                {
                   Chunk loaded_chunk = Chunk.load_from_png(chunk_file);
                   if (loaded_chunk != null)
@@ -133,21 +148,40 @@ public class World
          case PLAY:
          {
             if (debug_slow_motion) delta /= 10f;
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+            {
+               delta *= 5;
+            }
+
             for (int i = 0; i < list_entities.size; i++)
             {
                Entity ent = list_entities.get(i);
-               ent.update(delta);
+               ent.update(delta, i);
             }
 
-            if(list_chunks.size > 0)
+            for (int i = list_entity_index_remove.size - 1; i >= 0; i--)
+            {
+               list_entities.removeIndex(list_entity_index_remove.get(i));
+            }
+            list_entity_index_remove.clear();
+
+            if (list_spawn.size > 0)
+            {
+               list_entities.addAll(list_spawn);
+               list_spawn.clear();
+            }
+
+            if (list_chunks.size > 0)
             {
                // rendering the chunk ins visible list
                Chunk check_chunk = list_chunks.get(chunk_check_index);
                if (check_chunk.should_be_rendered(player.posx, player.posy))
                {
+                  if (!visible_chunks_set.contains(chunk_check_index)) check_chunk.init();
                   visible_chunks_set.add(chunk_check_index);
                } else
                {
+                  if (visible_chunks_set.contains(chunk_check_index)) check_chunk.unload_entities();
                   visible_chunks_set.remove(chunk_check_index);
                }
                chunk_check_index++;
@@ -161,6 +195,7 @@ public class World
                Config.load_config(true);
             }
 
+            // TODO: 01.05.23 DEBUG REMOVE BEFORE RELEASE
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
             {
                camera_offset_x += delta * 500;
@@ -180,7 +215,7 @@ public class World
             if (Gdx.input.isKeyJustPressed(Input.Keys.F10))
             {
                camera_offset_x = 0;
-               camera_offset_y = 0;
+               camera_offset_y = -50;
             }
          }
          break;
@@ -203,6 +238,9 @@ public class World
                Tile test_tile = get_tile(player.posx, player.posy);
                Text.draw("test_tile " + test_tile.toString(), 2, run_y -= off_y);
                Text.draw("player v " + player.vx + " " + player.vy, 2, run_y -= off_y);
+               Text.draw("jump hold " + Entity.jump_hold, 2, run_y -= off_y);
+               Text.draw("jump hold time " + Entity.jump_hold_time, 2, run_y -= off_y);
+               Text.draw("num entities " + World.list_entities.size, 2, run_y -= off_y);
             }
 
             global_offset_x = -player.posx + Main.SCREEN_WIDTH / 2f + camera_offset_x;

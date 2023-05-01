@@ -9,13 +9,17 @@ import com.badlogic.gdx.utils.IntIntMap;
 // this enum contains all texture regions that are loaded from atlas
 public enum Res
 {
-
    //SHEET_FLOOR_TILES(3, 16, 16),
 
    ERROR_FRAME(),
    PIXEL(),
    BOX(),
-   BLOCK1(Tile.values().length, 16, 16);
+   BLOCK1(Tile.values().length, 16, 16),
+   PIG(10, 32, 26),
+   ENEMY_FLOWER(5, 26,24),
+   PARTICLE_FLOWER(4, 10,10),
+   DECORATION(11, 98,123),
+   ;
 
    static final Array<Anim> load_queue = new Array<Anim>();
    public static Array<TextureRegion> animation_frames = new Array<TextureRegion>(); // contains all frames of all animations
@@ -72,6 +76,25 @@ public enum Res
       load_queue.clear();
        */
 
+
+
+      load_queue.add(Anim.PIG_IDLE);
+      load_queue.add(Anim.PIG_IDLE_PACK);
+      load_queue.add(Anim.PIG_RUN);
+      load_queue.add(Anim.PIG_RUN_PACK);
+      load_queue.add(Anim.PIG_FALL);
+      load_queue.add(Anim.PIG_FALL_PACK);
+      load_anims(PIG.region, PIG.sheet_width, PIG.sheet_height, 0);
+      load_queue.clear();
+
+      load_queue.add(Anim.ENEMY_FLOWER_IDLE);
+      load_queue.add(Anim.ENEMY_FLOWER_RUN);
+      load_anims(ENEMY_FLOWER.region, ENEMY_FLOWER.sheet_width, ENEMY_FLOWER.sheet_height, 0);
+      load_queue.clear();
+
+      load_queue.add(Anim.PARTICLE_FLOWER);
+      load_anims(PARTICLE_FLOWER.region, PARTICLE_FLOWER.sheet_width, PARTICLE_FLOWER.sheet_height, 0);
+      load_queue.clear();
    }
 
    private static void fixBleeding(TextureRegion... array)
