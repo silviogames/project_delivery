@@ -56,7 +56,7 @@ public class World
       tips_posy[0] = 5344;
       tips[0] = "[space] to jump";
 
-      tips_posx[1] = 837;
+      tips_posx[1] = 837 - 16 * 4;
       tips_posy[1] = 5344;
       tips[1] = "[E] to throw box";
 
