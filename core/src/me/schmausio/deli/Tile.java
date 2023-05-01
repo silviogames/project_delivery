@@ -11,6 +11,7 @@ public enum Tile
    GRASS_FLOWER(30, false),
    GRASS(40, false),
    GRASS_FLOWER_TWO(50, false),
+   MUSHROOM(60,true),
 
    ;
 

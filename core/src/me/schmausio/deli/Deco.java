@@ -5,10 +5,14 @@ public enum Deco
    NONE,
    FLOWER_1,
    FLOWER_2,
-
+   FLOWER_3,
+   FLOWER_4,
+   FLOWER_5,
    MUSHROOM_1,
    MUSHROOM_2,
-
+   MUSHROOM_3,
+   MUSHROOM_4,
+   MUSHROOM_5,
    ;
 
    public static Deco from_B(int B)

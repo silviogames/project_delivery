@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.IntIntMap;
 // this enum contains all texture regions that are loaded from atlas
 public enum Res
 {
-
    //SHEET_FLOOR_TILES(3, 16, 16),
 
    ERROR_FRAME(),
@@ -19,7 +18,7 @@ public enum Res
    PIG(10, 32, 26),
    ENEMY_FLOWER(5, 26,24),
    PARTICLE_FLOWER(4, 10,10),
-   DECORATION(2, 100,100),
+   DECORATION(11, 98,123),
    ;
 
    static final Array<Anim> load_queue = new Array<Anim>();

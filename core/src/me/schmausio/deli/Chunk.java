@@ -102,12 +102,21 @@ public class Chunk
                Main.batch.setColor(Color.WHITE);
             }
 
+            Main.batch.draw(Res.BLOCK1.sheet[content.get(ix, iy)], px, py);
+         }
+      }
+
+      for (int ix = 0; ix < CHUNK_SIZE; ix++)
+      {
+         for (int iy = 0; iy < CHUNK_SIZE; iy++)
+         {
+            float px = World.global_offset_x + ix * TILE_SIZE + cx * CHUNK_SIZE * TILE_SIZE;
+            float py = World.global_offset_y + iy * TILE_SIZE + cy * CHUNK_SIZE * TILE_SIZE;
             if (decoration.get(ix, iy) != 0)
             {
-               Main.batch.draw(Res.DECORATION.sheet[decoration.get(ix, iy)], px + TILE_SIZE / 2f, py);
+               Main.batch.setColor(Color.WHITE);
+               Main.batch.draw(Res.DECORATION.sheet[decoration.get(ix, iy)], px + TILE_SIZE / 2f - Res.DECORATION.sheet_width / 2f, py);
             }
-
-            Main.batch.draw(Res.BLOCK1.sheet[content.get(ix, iy)], px, py);
          }
       }
    }

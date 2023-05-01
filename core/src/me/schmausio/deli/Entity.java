@@ -2,12 +2,8 @@ package me.schmausio.deli;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.WindowedMean;
-import com.badlogic.gdx.utils.BooleanArray;
-import com.badlogic.gdx.utils.FloatArray;
 
 public class Entity
 {
@@ -80,7 +76,7 @@ public class Entity
                this.posy = spawn_chunk_y * Chunk.CHUNK_SIZE * Chunk.TILE_SIZE + tiley_offset * Chunk.TILE_SIZE;
             }
 
-            if(World.debug_render && Gdx.input.isKeyJustPressed(Input.Keys.TAB))
+            if (World.debug_render && Gdx.input.isKeyJustPressed(Input.Keys.TAB))
             {
             }
 
@@ -190,6 +186,19 @@ public class Entity
             {
                anim = pack ? Anim.PIG_FALL_PACK : Anim.PIG_FALL;
             }
+
+            if(AI_check){
+               if(pressing_move){
+
+                  float left_nx = posx - 1;
+                  float right_nx = posx + 1;
+                  boolean coll_left = World.collision(left_nx, posy);
+                  boolean coll_right = World.collision(right_nx, posy);
+                  if(coll_left && coll_right){
+                     System.out.println("STUCK!");
+                  }
+               }
+            }
          }
          break;
          case ENEMY_FLOWER:
@@ -225,7 +234,8 @@ public class Entity
                if (Math.abs(vx) < 0.001f) vx = 0;
             }
 
-            if(vx == 0 && vy == 0){
+            if (vx == 0 && vy == 0)
+            {
                dead = true;
                World.list_entity_index_remove.add(index);
             }
@@ -239,7 +249,7 @@ public class Entity
                if (Math.abs(vx) < 0.001f) vx = 0;
             }
 
-            if(Math.abs(vx) > 0.5f)
+            if (Math.abs(vx) > 0.5f)
             {
                for (int i = 0; i < World.list_entities.size; i++)
                {
